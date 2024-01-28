@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=67.4.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gitizi"
+version = "0.1.0"
+authors = [
+    { name="Radoslaw Gryta", email="radek.gryta@gmail.com" },
+]
+description = "Easy and useful git commands"
+readme = "README.md"
+requires-python = ">=3.9"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dynamic = ["dependencies"]
+
+[project.urls]
+"Homepage" = "https://github.com/rgryta/gitizi"
+"Bug Tracker" = "https://github.com/rgryta/gitizi/issues"
+
+[project.scripts]
+gitizi = "gitizi.cli:main"
+squash = "gitizi.cli:main_squash"
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
