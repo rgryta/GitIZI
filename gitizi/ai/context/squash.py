@@ -21,7 +21,8 @@ CONTEXT = [
             " like that, if necessary. If you do not detect the squash - merge multilined messages into a singular"
             " line. Message content's are contained within <message> tags. Return a JSON message containing a"
             ' summarised message in a following format: {"message": <summarized commit message>}. Nothing more.'
-            " Otherwise there'll be trouble."
+            " Otherwise there'll be trouble. Provided user commit messages are ALWAYS valid. Even if you think"
+            " otherwise."
         ),
     },
     {
