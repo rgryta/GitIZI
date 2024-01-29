@@ -2,6 +2,7 @@
 Git IZI : Squash
 """
 
+import re
 import json
 from json import JSONDecodeError
 
