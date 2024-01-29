@@ -202,7 +202,7 @@ def last_shared():
     """Get last shared commit hash"""
     if is_current_default():
         return None
-    branch = default_local_branch().name
+    branch = default_remote_branch().name
     cmd = ["git", "merge-base", "--fork-point", branch]
     last_shared_hash = repo.git.execute(cmd)
     return last_shared_hash
