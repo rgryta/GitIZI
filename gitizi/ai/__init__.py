@@ -7,7 +7,7 @@ from json import JSONDecodeError
 from aiohttp import WSServerHandshakeError
 
 from gitizi.util import suppress_output
-from ..exceptions import GitiziException
+from ..exceptions import GitiziException, GitiziParseException
 
 with suppress_output():
     import g4f
@@ -31,6 +31,7 @@ def contextualize(msg: str, ctx: Context = Context.ASK) -> list[dict]:
         case Context.SQUASH:
             ai_ctx = S_CONTEXT
             wrapper = S_WRAPPER
+            msg = msg if msg else "No changes"
         case Context.ASK | _:
             ai_ctx = []
             wrapper = "{user_message}"
@@ -62,7 +63,7 @@ def ask(msg: str, ctx: Context = Context.ASK):
                     auth=True,
                 )
                 return parse_response(msg=response, ctx=ctx)
-            except WSServerHandshakeError:
+            except WSServerHandshakeError, GitiziParseException, ConnectionResetError:
                 pass
         else:
             raise GitiziException("Connection error")
