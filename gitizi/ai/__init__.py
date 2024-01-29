@@ -63,7 +63,7 @@ def ask(msg: str, ctx: Context = Context.ASK):
                     auth=True,
                 )
                 return parse_response(msg=response, ctx=ctx)
-            except WSServerHandshakeError | GitiziParseException:
+            except WSServerHandshakeError, GitiziParseException:
                 pass
         else:
             raise GitiziException("Connection error")
