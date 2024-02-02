@@ -44,7 +44,7 @@ def retrieve_response(response: str):
         message: str = json.loads(response)["message"]
         if not message:
             raise GitiziParseException
-        if not message[0].isalpha() and not re.match(r"^\[Bump .* → .*\].*$", message):
+        if not message[0].isalpha() and not re.match(r"^\[Bump .*\].*$", message):
             raise GitiziParseException
         return message
     except JSONDecodeError as exc:
