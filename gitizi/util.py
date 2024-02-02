@@ -170,7 +170,11 @@ def commit(with_no_edit: bool = False):
             "--allow-empty",
         )
     else:
-        repo.git.commit("--no-edit", "--allow-empty")
+        try:
+            repo.git.commit("--no-edit", "--allow-empty")
+        except git.exc.GitCommandError:
+            # Empty commit message (no merge was required)
+            pass
 
 
 def merge_to_current(
