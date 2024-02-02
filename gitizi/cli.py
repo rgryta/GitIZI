@@ -35,16 +35,8 @@ from .util import (
 def main():
     """Git IZI entrypoint command"""
 
-
-@main.command()
-@click.option(
-    "--reset/--no-reset",
-    is_flag=True,
-    default=False,
-    help="Reset local branch to its remote state.",
-)
-def default(reset: bool = False):
-    """Print default branch name"""
+def _default(reset: bool):
+    """Helper function"""
     fetch_default()
     click.echo(
         f"[{default_local_branch().name}] ----[In sync: {default_synced()}]----> [{default_remote_branch().name}]"
@@ -69,6 +61,18 @@ def default(reset: bool = False):
             if checked:
                 checkout(old_branch)
             click.echo(f"Branch [{default_local_branch()}] is already synchronised")
+
+
+@main.command()
+@click.option(
+    "--reset/--no-reset",
+    is_flag=True,
+    default=False,
+    help="Reset local branch to its remote state.",
+)
+def default(reset: bool = False):
+    """Print default branch name"""
+    _default(reset=reset)
 
 
 @main.group()
@@ -108,7 +112,7 @@ def _squash(force: bool = False):
                 f"Default branch [{default_local_branch()}] is not in sync with remote default [{default_remote_branch()}]"
             )
             raise click.Abort
-        default(reset=True)
+        _default(reset=True)
         # TODO: Pull default -- check if reset is all that's needed
     click.echo("Default branch is in sync with remote, continuing...")
 
