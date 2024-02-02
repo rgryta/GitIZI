@@ -35,6 +35,7 @@ from .util import (
 def main():
     """Git IZI entrypoint command"""
 
+
 def _default(reset: bool):
     """Helper function"""
     fetch_default()
