@@ -4,7 +4,7 @@ Git IZI : AI
 
 from json import JSONDecodeError
 
-from aiohttp import WSServerHandshakeError
+from aiohttp import WSServerHandshakeError, ClientOSError
 
 from gitizi.util import suppress_output
 from ..exceptions import GitiziException, GitiziParseException
@@ -63,7 +63,7 @@ def ask(msg: str, ctx: Context = Context.ASK):
                     auth=True,
                 )
                 return parse_response(msg=response, ctx=ctx)
-            except (WSServerHandshakeError, GitiziParseException, ConnectionResetError):
+            except (WSServerHandshakeError, ClientOSError, GitiziParseException, ConnectionResetError):
                 pass
         else:
             raise GitiziException("Connection error")
