@@ -33,8 +33,6 @@ gitizi = "gitizi"
 
 [tool.setuptools.dynamic]
 dependencies = {file = ["requirements.txt"]}
-
-[tool.setuptools.dynamic]
 optional-dependencies = { dev = {file = ["requirements_dev.txt"]} }
 
 ####### BUMPV #######
