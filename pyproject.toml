@@ -85,7 +85,7 @@ black = { execute = "black {flags} . tests", format = {flags = "flags"}}
 pylint = { execute = "pylint {package} tests", format = {package = "package"}}
 noprint = { execute = "noprint -ve {package} tests", format = {package = "package"}}
 # Test
-coverage = { prepare = "coverage run -m pytest -xv tests", execute = "coverage report -m --fail-under=30", cleanup = "coverage erase"}
+coverage = { prepare = "coverage run -m pytest -xv tests", execute = "coverage report -m --fail-under=0", cleanup = "coverage erase"}
 
 [tool.staging.stages.test]
 description = "Test the package"

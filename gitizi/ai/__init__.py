@@ -4,25 +4,21 @@ Git IZI : AI
 
 from json import JSONDecodeError
 
-from aiohttp import WSServerHandshakeError, ClientOSError
+from aiohttp import ClientOSError, WSServerHandshakeError
 
 from gitizi.util import suppress_output
+
 from ..exceptions import GitiziException, GitiziParseException
 
 with suppress_output():
     import g4f
 
-from g4f.Provider import (
-    Bing,
-)
+from g4f.Provider import Bing  # pylint:disable=wrong-import-order
 
 from .context import Context
-
-from .context.squash import (
-    CONTEXT as S_CONTEXT,
-    USER_MSG_WRAPPER as S_WRAPPER,
-    retrieve_response as S_RESPONSE,
-)
+from .context.squash import CONTEXT as S_CONTEXT
+from .context.squash import USER_MSG_WRAPPER as S_WRAPPER
+from .context.squash import retrieve_response as S_RESPONSE
 
 
 def contextualize(msg: str, ctx: Context = Context.ASK) -> list[dict]:
@@ -65,5 +61,4 @@ def ask(msg: str, ctx: Context = Context.ASK):
                 return parse_response(msg=response, ctx=ctx)
             except (WSServerHandshakeError, ClientOSError, GitiziParseException, ConnectionResetError):
                 pass
-        else:
-            raise GitiziException("Connection error")
+        raise GitiziException("Connection error")

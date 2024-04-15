@@ -6,29 +6,30 @@ import sys
 
 import click
 
-from .ai import ask as ask_ai, Context
-from .exceptions import GitiziException
+from .ai import Context
+from .ai import ask as ask_ai
 from .util import (
-    default_remote_branch,
-    default_local_branch,
-    current_synced,
-    default_synced,
-    reset_default,
-    is_current_default,
-    current_branch,
-    default_remote,
-    all_commited,
-    checkout,
     commit,
-    fetch_default,
-    merge_to_current,
-    last_shared,
-    get_log_until,
+    checkout,
     get_hash,
+    last_shared,
+    all_commited,
     reset_branch,
     delete_branch,
+    fetch_default,
+    get_log_until,
+    reset_default,
+    current_branch,
+    current_synced,
+    default_remote,
+    default_synced,
+    merge_to_current,
     ammend_commit_msg,
+    is_current_default,
+    default_local_branch,
+    default_remote_branch,
 )
+from .exceptions import GitiziException
 
 
 @click.group()
@@ -48,9 +49,7 @@ def _default(reset: bool):
         old_branch = None
         if not is_current_default():
             if not all_commited():
-                click.echo(
-                    "All local changes have to be commited or stashed before reset"
-                )
+                click.echo("All local changes have to be commited or stashed before reset")
                 raise click.Abort
             checked, old_branch = checkout()
         if not default_synced():
@@ -84,9 +83,7 @@ def current():
 @current.command()
 def info():
     """Current branch info"""
-    click.echo(
-        f"Current branch is: {current_branch()}, is default: {is_current_default()}"
-    )
+    click.echo(f"Current branch is: {current_branch()}, is default: {is_current_default()}")
     click.echo(
         f"Default branch is: {default_local_branch()}, is in sync with remote [{default_remote()}]: {default_synced()}"
     )
@@ -110,18 +107,17 @@ def _squash(force: bool = False):
     if not default_synced():
         if not force:
             click.echo(
-                f"Default branch [{default_local_branch()}] is not in sync with remote default [{default_remote_branch()}]"
+                f"Default branch [{default_local_branch()}] is not in sync with "
+                f"remote default [{default_remote_branch()}]"
             )
             raise click.Abort
         _default(reset=True)
-        # TODO: Pull default -- check if reset is all that's needed
+        # TODO: Pull default -- check if reset is all that's needed  pylint:disable=fixme
     click.echo("Default branch is in sync with remote, continuing...")
 
     if not current_synced(can_ahead=True):
         if not force:
-            click.echo(
-                f"Current branch [{current_branch()}] is behind with local default [{default_local_branch()}]"
-            )
+            click.echo(f"Current branch [{current_branch()}] is behind with local default [{default_local_branch()}]")
             raise click.Abort
         merge_to_current()
     click.echo("Default branch is ahead or in sync with default, continuing...")
@@ -161,6 +157,7 @@ def _squash(force: bool = False):
     help="Try to perform all actions needed to create a squashed commit.",
 )
 def squash(force: bool = False):
+    """Command to squash, optionally forceful"""
     _squash(force=force)
 
 
@@ -173,4 +170,5 @@ def ask(message: str):
 
 @click.command()
 def main_squash():
+    """Command to squash with force - please know what you're doing"""
     _squash(force=True)
