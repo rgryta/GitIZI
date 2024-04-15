@@ -4,11 +4,10 @@ Git IZI : Util
 
 import os
 import sys
-
 from contextlib import contextmanager, redirect_stderr, redirect_stdout
 
-import click
 import git
+import click
 
 from .exceptions import GitiziException
 
@@ -40,9 +39,7 @@ def default_remote():
 def default_remote_branch(remote: str | git.Remote | None = None) -> git.Reference:
     """Get default branch"""
     remote = (
-        remote
-        if isinstance(remote, git.Remote)
-        else git.Remote(repo=repo, name=remote) if remote else default_remote()
+        remote if isinstance(remote, git.Remote) else git.Remote(repo=repo, name=remote) if remote else default_remote()
     )
 
     return next(filter(lambda ref: ref.name == f"{remote.name}/HEAD", remote.refs)).ref
@@ -116,9 +113,7 @@ def current_synced(can_behind: bool = False, can_ahead: bool = False) -> bool:
 
 def reset_default():
     """Fully resets default branch to be in-line with its remote"""
-    repo.head.reset(
-        commit=f"{default_remote()}/HEAD", index=True, working_tree=True, paths=None
-    )
+    repo.head.reset(commit=f"{default_remote()}/HEAD", index=True, working_tree=True, paths=None)
 
 
 def all_commited() -> bool:
@@ -152,9 +147,7 @@ def checkout(branch: str | None = None, new: bool = False) -> tuple[bool, str]:
 
 def fetch_default():
     """Fetch default branch from default remote"""
-    default_remote().fetch(
-        refspec=f"refs/heads/{default_local_branch().name}:{default_remote_branch().path}"
-    )
+    default_remote().fetch(refspec=f"refs/heads/{default_local_branch().name}:{default_remote_branch().path}")
 
 
 def commit(with_no_edit: bool = False):

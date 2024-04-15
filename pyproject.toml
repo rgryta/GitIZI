@@ -10,13 +10,13 @@ authors = [
 ]
 description = "Easy and useful git commands"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.11"
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
-dynamic = ["dependencies"]
+dynamic = ["dependencies", "optional-dependencies"]
 
 [project.urls]
 "Homepage" = "https://github.com/rgryta/gitizi"
@@ -26,5 +26,85 @@ dynamic = ["dependencies"]
 gitizi = "gitizi.cli:main"
 squash = "gitizi.cli:main_squash"
 
+####### SETUPTOOLS #######
+
+[tool.setuptools.package-dir]
+gitizi = "gitizi"
+
 [tool.setuptools.dynamic]
 dependencies = {file = ["requirements.txt"]}
+optional-dependencies = { dev = {file = ["requirements_dev.txt"]} }
+
+####### BUMPV #######
+
+[tool.bumpversion]
+current_version = "0.2.6"
+allow_dirty = true
+commit = true
+message = "[Version {new_version}]"
+
+[[tool.bumpversion.files]]
+filename = "pyproject.toml"
+search = "version = \"{current_version}\""
+replace = "version = \"{new_version}\""
+
+####### BLACK #######
+
+[tool.black]
+line-length = 120
+preview = true
+
+####### COVERAGE #######
+
+[tool.coverage.run]
+source = ["gitizi/"]
+
+####### ISORT #######
+
+[tool.isort]
+profile = "black"
+line_length = 120
+length_sort = true
+atomic = true
+
+####### PYLINT #######
+
+[tool.pylint.main]
+disable = ["logging-fstring-interpolation"]
+output-format = "colorized"
+
+[tool.pylint.format]
+max-line-length = 120
+
+####### STAGING #######
+
+[tool.staging.steps]
+# Lint
+isort = { execute = "isort {flags} . tests", format = {flags = "flags"}}
+black = { execute = "black {flags} . tests", format = {flags = "flags"}}
+pylint = { execute = "pylint {package} tests", format = {package = "package"}}
+noprint = { execute = "noprint -ve {package} tests", format = {package = "package"}}
+# Test
+coverage = { prepare = "coverage run -m pytest -xv tests", execute = "coverage report -m --fail-under=0", cleanup = "coverage erase"}
+
+[tool.staging.stages.test]
+description = "Test the package"
+format = {package="gitizi"}
+steps = [
+    {step = "coverage"},
+]
+
+[tool.staging.stages.format]
+description = "Test the package"
+format = {package="gitizi"}
+steps = [
+    {step = "isort"},
+    {step = "black"},
+]
+
+[tool.staging.stages.lint]
+description = "Test the package"
+format = {flags="--check", package="gitizi"}
+steps = [
+    {parallel = {steps = ["isort", "black", "pylint", "noprint"]}},
+]

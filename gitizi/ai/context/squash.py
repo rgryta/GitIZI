@@ -40,6 +40,7 @@ USER_MSG_WRAPPER = "Squashed commit message:\n <message>{user_message}</message>
 
 
 def retrieve_response(response: str):
+    """Retrieve response from AI"""
     try:
         message: str = json.loads(response)["message"]
         if not message:
