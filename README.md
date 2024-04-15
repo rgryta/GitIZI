@@ -13,6 +13,27 @@ Useful `git` scripts. Some of which utilizing AI.
 
 Uses [GPT 4 Free](https://github.com/xtekky/gpt4free) Bing Provider for it's AI capabilities.
 
+## Usage
+
+### Command
+
+Simply execute `check-bump` within a directory where your `pyproject.toml` is located. Or provide a path using `--path` argument.
+
+```bash
+user$ gitizi --help 
+Usage: gitizi [OPTIONS] COMMAND [ARGS]...
+
+  Git IZI entrypoint command
+
+Options:
+  --help  Show this message and exit.
+
+Commands:
+  ask      Ask AI
+  current  Operations on current branch
+  default  Print default branch name
+```
+
 
 
 ## Development
