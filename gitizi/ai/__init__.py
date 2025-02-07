@@ -12,6 +12,7 @@ from ..exceptions import GitiziException, GitiziParseException
 
 with suppress_output():
     import g4f
+    from g4f.client import Client
 
 from g4f.Provider import Bing  # pylint:disable=wrong-import-order
 
@@ -52,12 +53,12 @@ def ask(msg: str, ctx: Context = Context.ASK):
     with suppress_output():
         for _ in range(3):
             try:
-                response = g4f.ChatCompletion.create(
-                    model=g4f.models.default,
+                client = Client()
+                response = client.chat.completions.create(
+                    model="gpt-3.5-turbo",
                     messages=messages,
-                    provider=Bing,
-                    auth=True,
                 )
+                response = response.choices[0].message.content
                 return parse_response(msg=response, ctx=ctx)
             except (WSServerHandshakeError, ClientOSError, GitiziParseException, ConnectionResetError):
                 pass
